@@ -1,0 +1,193 @@
+ {%load static %}
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+ <script>
+        // Menu móvil
+        document.getElementById('mobileMenu').addEventListener('click', function () {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // Modal de inicio de sesión
+        const modal = document.getElementById('loginModal');
+        const btn = document.getElementById('ingresoBtn');
+        const span = document.getElementsByClassName('close')[0];
+
+        // Abrir modal al hacer clic en Ingreso
+        btn.onclick = function (e) {
+            e.preventDefault();
+            modal.style.display = 'block';
+        }
+
+        // Cerrar modal al hacer clic en la X
+        span.onclick = function () {
+            modal.style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Manejar el envío del formulario de inicio de sesión
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            if (!user.includes("@") || !user.includes(".")) {
+                alert('Por favor, ingrese un correo electrónico válido.');
+                return;
+            }
+
+            if (pass.length < 8) {
+                alert('La contraseña debe tener al menos 8 caracteres.');
+                return;
+            }
+
+            let roleMessage;
+            switch (role) {
+                case 'admin':
+                    roleMessage = 'Administrador';
+                    break;
+                case 'technician':
+                    roleMessage = 'Técnico';
+                    break;
+                default:
+                    roleMessage = 'Cliente';
+            }
+
+            // Aquí normalmente enviarías los datos al servidor para autenticación
+            console.log('Inicio de sesión:', { user, pass, role });
+
+            // Mostrar mensaje de éxito
+            alert(`Bienvenido ${user} (${roleMessage})`);
+
+            // Cerrar el modal y limpiar el formulario
+            modal.style.display = 'none';
+            this.reset();
+
+            // Aquí podrías redirigir al usuario según su rol
+            // window.location.href = 'dashboard.html';
+        });
+
+        // Selección de roles
+        const roleOptions = document.querySelectorAll('.role-option');
+        roleOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                roleOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Seleccionar cliente por defecto
+        document.getElementById('client-option').classList.add('selected');
+
+        // Animación de contadores
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(animateCounters, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Lanzar animación cuando la sección "nosotros" sea visible
+        window.addEventListener('scroll', function () {
+            const aboutSection = document.getElementById('nosotros');
+            const sectionPosition = aboutSection.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+
+            if (sectionPosition < screenPosition) {
+                animateCounters();
+                // Remover el event listener para que no se repita
+                window.removeEventListener('scroll', this);
+            }
+        });
+
+        // Filtrado de productos (simulado)
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                // Remover clase active de todos los botones
+                filterBtns.forEach(btn => btn.classList.remove('active'));
+                // Añadir clase active al botón clickeado
+                this.classList.add('active');
+                // Aquí iría la lógica para filtrar los productos
+                const filter = this.getAttribute('data-filter');
+                console.log('Filtrar por:', filter);
+            });
+        });
+
+        // Manejo del formulario de contacto
+        document.getElementById('contactForm').onsubmit = function (e) {
+            e.preventDefault();
+            alert('Mensaje enviado con éxito. Nos pondremos en contacto pronto.');
+            this.reset();
+            return false;
+        }
+
+        // Manejo del newsletter
+        document.getElementById('newsletterForm').onsubmit = function (e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            alert(`Gracias por suscribirte con el correo: ${email}`);
+            this.reset();
+            return false;
+        }
+
+        // Menu lateral
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.querySelector('.sidebar-overlay');
+        const menuToggle = document.getElementById('menuToggle');
+        const closeSidebar = document.querySelector('.close-sidebar');
+        const body = document.body;
+
+        // Abrir menú lateral
+        menuToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('open');
+            body.classList.add('menu-open');
+        });
+
+        // Cerrar menú lateral
+        closeSidebar.addEventListener('click', function () {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            body.classList.remove('menu-open');
+        });
+
+        // Cerrar al hacer clic fuera
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+            body.classList.remove('menu-open');
+        });
+
+        // Submenús
+        const menuItems = document.querySelectorAll('.menu-item.with-submenu');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    this.classList.toggle('open');
+                    const submenu = this.querySelector('.submenu');
+                    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+    </script>

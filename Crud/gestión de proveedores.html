@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Soft - Gestión de Proveedores</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            color: #4a42d1;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4a42d1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a32c1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Proveedores</h1>
+            <button class="btn btn-primary" onclick="showAddForm()">Agregar Proveedor</button>
+        </div>
+
+        <div id="alert-placeholder"></div>
+
+        <div id="list-section">
+            <div class="card">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Buscar proveedor...">
+                    <button class="btn btn-primary" onclick="searchProviders()">Buscar</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cédula</th>
+                            <th>NIT</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="providers-table">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="form-section" class="hidden">
+            <div class="card">
+                <h2 id="form-title">Agregar Proveedor</h2>
+                <form id="provider-form">
+                    <input type="hidden" id="provider-id">
+
+                    <div class="form-group">
+                        <label for="provider-name">Nombre del Proveedor</label>
+                        <input type="text" id="provider-name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-id-number">Cédula</label>
+                        <input type="text" id="provider-id-number" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-nit">NIT del Proveedor</label>
+                        <input type="text" id="provider-nit" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-address">Dirección de la Empresa</label>
+                        <input type="text" id="provider-address" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-phone">Teléfono</label>
+                        <input type="tel" id="provider-phone" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" onclick="cancelForm()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+     
+        let providers = JSON.parse(localStorage.getItem('providers')) || [
+            {
+                id: '1',
+                name: 'Proveedor Ejemplo 1',
+                idNumber: '123456789',
+                nit: '901234567-8',
+                address: 'Calle 123 #45-67',
+                phone: '3001234567'
+            },
+            {
+                id: '2',
+                name: 'Proveedor Ejemplo 2',
+                idNumber: '987654321',
+                nit: '876543210-9',
+                address: 'Avenida Principal #12-34',
+                phone: '3107654321'
+            }
+        ];
+
+        let editingProviderId = null;
+
+        function saveProvidersToLocalStorage() {
+            localStorage.setItem('providers', JSON.stringify(providers));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProvidersTable();
+            
+            document.getElementById('provider-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProvider();
+            });
+        });
+
+        function showAddForm() {
+            document.getElementById('list-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+            document.getElementById('form-title').textContent = 'Agregar Proveedor';
+            document.getElementById('provider-form').reset();
+            document.getElementById('provider-id').value = '';
+            editingProviderId = null;
+        }
+
+        function cancelForm() {
+            document.getElementById('list-section').classList.remove('hidden');
+            document.getElementById('form-section').classList.add('hidden');
+            document.getElementById('provider-form').reset();
+            editingProviderId = null;
+        }
+
+        function renderProvidersTable(providersToRender = providers) {
+            const tableBody = document.getElementById('providers-table');
+            tableBody.innerHTML = '';
+
+            if (providersToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay proveedores registrados</td></tr>';
+                return;
+            }
+
+            providersToRender.forEach(provider => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${provider.name}</td>
+                    <td>${provider.idNumber}</td>
+                    <td>${provider.nit}</td>
+                    <td>${provider.address}</td>
+                    <td>${provider.phone}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="editProvider('${provider.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProvider('${provider.id}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchProviders() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderProvidersTable();
+                return;
+            }
+            
+            const filteredProviders = providers.filter(provider => 
+                provider.name.toLowerCase().includes(searchTerm) ||
+                provider.idNumber.toLowerCase().includes(searchTerm) ||
+                provider.nit.toLowerCase().includes(searchTerm) ||
+                provider.phone.toLowerCase().includes(searchTerm) ||
+                provider.address.toLowerCase().includes(searchTerm)
+            );
+            
+            renderProvidersTable(filteredProviders);
+        }
+
+        function saveProvider() {
+            const provider = {
+                id: editingProviderId || generateId(),
+                name: document.getElementById('provider-name').value,
+                idNumber: document.getElementById('provider-id-number').value,
+                nit: document.getElementById('provider-nit').value,
+                address: document.getElementById('provider-address').value,
+                phone: document.getElementById('provider-phone').value
+            };
+
+            if (editingProviderId) {
+               
+                const index = providers.findIndex(p => p.id === editingProviderId);
+                if (index !== -1) {
+                    providers[index] = provider;
+                    showAlert('Proveedor actualizado correctamente', 'success');
+                }
+            } else {
+              
+                providers.push(provider);
+                showAlert('Proveedor agregado correctamente', 'success');
+            }
+
+       
+            saveProvidersToLocalStorage();
+
+            cancelForm();
+            renderProvidersTable();
+        }
+
+        function editProvider(id) {
+            const provider = providers.find(p => p.id === id);
+            if (!provider) return;
+
+            editingProviderId = id;
+
+            document.getElementById('provider-id').value = provider.id;
+            document.getElementById('provider-name').value = provider.name;
+            document.getElementById('provider-id-number').value = provider.idNumber;
+            document.getElementById('provider-nit').value = provider.nit;
+            document.getElementById('provider-address').value = provider.address;
+            document.getElementById('provider-phone').value = provider.phone;
+
+            document.getElementById('list-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+            document.getElementById('form-title').textContent = 'Editar Proveedor';
+        }
+
+        function deleteProvider(id) {
+            if (confirm('¿Está seguro que desea eliminar este proveedor?')) {
+                providers = providers.filter(provider => provider.id !== id);
+           
+                saveProvidersToLocalStorage();
+                renderProvidersTable();
+                showAlert('Proveedor eliminado correctamente', 'success');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertPlaceholder = document.getElementById('alert-placeholder');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                ${message}
+                <button style="float: right; background: none; border: none; cursor: pointer;" onclick="this.parentElement.remove()">
+                    &times;
+                </button>
+            `;
+            
+            alertPlaceholder.innerHTML = '';
+            alertPlaceholder.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function generateId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+    </script>
+</body>
+</html>

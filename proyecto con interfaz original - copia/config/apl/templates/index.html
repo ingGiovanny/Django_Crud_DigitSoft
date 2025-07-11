@@ -1,0 +1,233 @@
+{% load static %}
+
+{% include "home.html" %}
+
+<body>
+    <!-- Menú lateral -->
+  {% include "menu_lateral.html"%}
+<!--header-->
+   {% include "header.html"%}
+
+    <!-- Modal de Inicio de Sesión -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="login-left">
+           
+                <a href="#" class="imagenes"><img src="{% static 'imagenes/logo.jpg' %}" alt="Logo Digit Soft"/></a>
+            </div>
+            <div class="login-right">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <label for="username">Correo Electrónico</label>
+                    <input type="email" id="username" required placeholder="ejemplo@correo.com">
+
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" required placeholder="Mínimo 8 caracteres">
+
+                    <label>Tipo de Usuario</label>
+                    <div class="role-selector">
+                        <label class="role-option" id="client-option">
+                            <input type="radio" name="role" value="client" checked>
+                            Cliente
+                        </label>
+                        <label class="role-option" id="admin-option">
+                            <input type="radio" name="role" value="admin">
+                            Administrador
+                        </label>
+                        <label class="role-option" id="tech-option">
+                            <input type="radio" name="role" value="technician">
+                            Técnico
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-login">Ingresar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <section id="inicio" class="hero">
+        <a href="#" class="imagenes"><img src="{% static 'imagenes/fon2.jpg'%}" alt="Descripción de la imagen"/></a>
+        <div class="container">
+            <h2>Soluciones Informáticas Integrales</h2>
+            <p>Expertos en mantenimiento técnico y venta de equipos de computación</p>
+            <a href="#contacto" class="btn">Contáctanos</a>
+        </div>
+    </section>
+
+    <section id="servicios" class="services">
+        <div class="container">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-tools"></i>
+                    <h3>Infraestructura</h3>
+                    <p>Hosting - Domino<br>
+                        Correo Corporativo<br>
+                        Configuración de servidores<br>
+                        Cableado Estructurad.<br></p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-wrench"></i>
+                    <h3>Soporte Técnico</h3>
+                    <p>CCTV y Cámaras<br>
+                        Presencial y Remoto<br>
+                        Backups y Respaldos de Información<br>
+                        Mantenimiento Preventivo y Correctivo<br>
+                        de equipos de Computo.<br></p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Software</h3>
+                    <p>Desarrollo a la Medida<br>
+                        Servicios Cloud<br>
+                        Data Analitycs<br>
+                        Business Intelligence (BI).<br></p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Diseño Web</h3>
+                    <p>Landing Page - Blogs<br>
+                        Sitios Web Informativos y Corporativos<br>
+                        Tiendas Online<br>
+                        Posicionamiento SEO y SEM.<br></p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Venta</h3>
+                    <p>PC y Portátiles-Equipos Corporativos<br>
+                        Impresoras - Cámaras de Seguridad<br>
+                        Accesorios PC - Retail y POS<br>
+                        UPS - Biométricos - Licenciamiento.<br></p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Soporte Remoto</h3>
+                    <p>Asistencia técnica inmediata sin necesidad de desplazamiento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="productos" class="products">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos</h2>
+            <div class="product-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="laptop">Laptops</button>
+                <button class="filter-btn" data-filter="desktop">Computadoras</button>
+                <button class="filter-btn" data-filter="accesorio">Accesorios</button>
+            </div>
+            <div class="products-grid">
+                <!-- Los productos se cargarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+    <section id="nosotros" class="about">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">Sobre Nosotros</h2>
+                <p>Digit Soft es una empresa especializada en soluciones informáticas con más de 6 años de experiencia
+                    en el mercado. Nos dedicamos a brindar servicios técnicos de calidad y ofrecer productos
+                    tecnológicos que se adapten a las necesidades de nuestros clientes.</p>
+                <p>Nuestro equipo está conformado por profesionales altamente capacitados y comprometidos con la
+                    excelencia en el servicio. Nos enorgullece ofrecer soluciones personalizadas para cada caso, ya sea
+                    para el hogar, pequeñas empresas o corporaciones.</p>
+                <h2 class="section-title">Misión</h2>
+                <p>Nuestra misión es trascender las expectativas, construyendo puentes que conecten las ideas con la
+                    realidad. Desde el desarrollo de software a medida que transforma la forma en que las empresas
+                    operan, hasta el diseño web que cautiva con su estética envolvente, abrazamos la misión de construir
+                    un futuro donde la tecnología sea una aliada inseparable del éxito empresarial. Nuestra
+                    infraestructura robusta actúa como cimiento para la innovación, proporcionando la base sólida sobre
+                    la cual nuestros clientes construyen sus sueños digitales.</p>
+                <h2 class="section-title">Visión</h2>
+                <p>Nuestra visión es ser más que un simple proveedor de servicios tecnológicos, queremos ser el puente
+                    que une desafíos con soluciones, llevando a cada cliente hacia el éxito, no solo ofrecemos
+                    productos, sino una visión compartida de un mañana más eficiente y emocionante.</p>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>+<span class="counter" data-target="1500">0</span></h3>
+                        <p>Clientes satisfechos</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>+<span class="counter" data-target="6">0</span></h3>
+                        <p>Años de experiencia</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3><span class="counter" data-target="98">0</span>%</h3>
+                        <p>Satisfacción del cliente</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <a href="#" class="imagenes"><img src="{% static 'imagenes/fachada digit soft.jpg'%}" alt="Equipo de Digit Soft"/></a>
+                
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contáctanos</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle 15 # 14-26, Duitama - Boyacá</p>
+                    <p><i class="fas fa-phone"></i> (+57) 3215434380, (+57) 3148004120, (+57) 3214696917</p>
+                    <p><i class="fas fa-envelope"></i> info@digitsoft.com.co</p>
+                    <p><i class="fas fa-clock"></i> Lunes a Viernes: 9:00 a.m. - 7:00 p.m.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Envíanos un Mensaje</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Nombre completo" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Correo electrónico" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" placeholder="Teléfono">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" rows="5" placeholder="Tu mensaje" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Enviar Mensaje</button>
+                    </form>
+                </div>
+                <div class="contact-map">
+                    <h3>Ubicación</h3>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.102254086991!2d-73.0368986847344!3d5.828329601361347!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6a3c1e1c1c1c1d%3A0x1c1c1c1c1c1c1c1d!2sCalle%2015%20%2314-26%2C%20Duitama%2C%20Boyac%C3%A1!5e0!3m2!1ses!2sco!4v1620000000000!5m2!1ses!2sco"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!--footer-->
+  {% include "footer.html" %}
+
+
+
+    <!-- Scripts -->
+    {%include "scrip.html" %}
+
+ 
+</body>
+
+</html>

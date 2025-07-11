@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Soft - Gestión de Proveedores</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #4a42d1;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #4a42d1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a32c1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #fafafa;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Administradores</h1>
+            <button class="btn btn-primary" onclick="showAddForm()">Agregar Administrador</button>
+        </div>
+
+        <div id="alert-placeholder"></div>
+
+        <div id="list-section">
+            <div class="card">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Buscar administrador...">
+                    <button class="btn btn-primary" onclick="searchAdministrators()">Buscar</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cédula</th>
+                            <th>Correo Electrónico</th>
+                        </tr>
+                    </thead>
+                    <tbody id="administrators-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="form-section" class="hidden">
+            <div class="card">
+                <h2 id="form-title">Agregar Administrador</h2>
+                <form id="administrator-form">
+                    <input type="hidden" id="administrator-id">
+
+                    <div class="form-group">
+                        <label for="administrator-name">Nombre del Administrador</label>
+                        <input type="text" id="administrator-name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="administrator-id-number">Cédula</label>
+                        <input type="text" id="administrator-id-number" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="administrator-address">Correo Electrónico</label>
+                        <input type="email" id="administrator-address" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" onclick="cancelForm()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAdministratorsTable();
+            document.getElementById('administrator-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveAdministrator();
+            });
+        });
+
+        function showAddForm() {
+            document.getElementById('list-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+            document.getElementById('form-title').textContent = 'Agregar Administrador';
+            document.getElementById('administrator-form').reset();
+            editingAdministratorId = null;
+        }
+
+        function cancelForm() {
+            document.getElementById('list-section').classList.remove('hidden');
+            document.getElementById('form-section').classList.add('hidden');
+            document.getElementById('administrator-form').reset();
+            editingAdministratorId = null;
+        }
+
+        function renderAdministratorsTable(administratorsToRender = administrators) {
+            const tableBody = document.getElementById('administrators-table');
+            tableBody.innerHTML = '';
+
+            if (administratorsToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay administradores registrados</td></tr>';
+                return;
+            }
+
+            administratorsToRender.forEach(administrator => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${administrator.name}</td>
+                    <td>${administrator.idNumber}</td>
+                    <td>${administrator.email}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="editAdministrator('${administrator.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteAdministrator('${administrator.id}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchAdministrators() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (!searchTerm) {
+                renderAdministratorsTable();
+                return;
+            }
+            const filteredAdministrators = administrators.filter(administrator =>
+                administrator.name.toLowerCase().includes(searchTerm) ||
+                administrator.idNumber.toLowerCase().includes(searchTerm) ||
+                administrator.email.toLowerCase().includes(searchTerm)
+            );
+            renderAdministratorsTable(filteredAdministrators);
+        }
+
+        function saveAdministrator() {
+            const administrator = {
+                id: editingAdministratorId || generateId(),
+                name: document.getElementById('administrator-name').value,
+                idNumber: document.getElementById('administrator-id-number').value,
+                email: document.getElementById('administrator-address').value,
+            };
+
+            if (editingAdministratorId) {
+                const index = administrators.findIndex(a => a.id === editingAdministratorId);
+                if (index !== -1) {
+                    administrators[index] = administrator;
+                    showAlert('Administrador actualizado correctamente', 'success');
+                }
+            } else {
+                administrators.push(administrator);
+                showAlert('Administrador agregado correctamente', 'success');
+            }
+
+            cancelForm();
+            renderAdministratorsTable();
+        }
+
+        function editAdministrator(id) {
+            const administrator = administrators.find(a => a.id === id);
+            if (!administrator) return;
+
+            editingAdministratorId = id;
+
+            document.getElementById('administrator-id').value = administrator.id;
+            document.getElementById('administrator-name').value = administrator.name;
+            document.getElementById('administrator-id-number').value = administrator.idNumber;
+            document.getElementById('administrator-address').value = administrator.email;
+
+            document.getElementById('list-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+            document.getElementById('form-title').textContent = 'Editar Administrador';
+        }
+
+        function deleteAdministrator(id) {
+            if (confirm('¿Está seguro que desea eliminar este administrador?')) {
+                administrators = administrators.filter(administrator => administrator.id !== id);
+                renderAdministratorsTable();
+                showAlert('Administrador eliminado correctamente', 'success');
+            }
+        }
+    </script>
+</body>
+
+</html>

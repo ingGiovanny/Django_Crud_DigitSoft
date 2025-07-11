@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Gestión de Clientes, Órdenes y Facturas</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            color: #4a42d1;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #4a42d1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a32c1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: black;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #f1f1f1;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab.active {
+            background: #4a42d1;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .status-pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-cancelled {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-paid {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-unpaid {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        /* Estilos para la factura */
+        .invoice-container {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a42d1;
+        }
+
+        .invoice-details {
+            text-align: right;
+        }
+
+        .invoice-company {
+            margin-bottom: 30px;
+        }
+
+        .invoice-company h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .invoice-to {
+            margin-bottom: 20px;
+        }
+
+        .invoice-to h4 {
+            margin: 0 0 10px 0;
+            color: #555;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .invoice-table th {
+            background: #f5f7fa;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .invoice-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .invoice-totals {
+            margin-left: auto;
+            width: 300px;
+        }
+
+        .invoice-totals table {
+            width: 100%;
+        }
+
+        .invoice-totals td {
+            padding: 8px;
+        }
+
+        .invoice-totals tr:last-child {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .invoice-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #777;
+        }
+
+        .print-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .invoice-container, .invoice-container * {
+                visibility: visible;
+            }
+            .invoice-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Clientes, Servicios y Facturas</h1>
+            <div>
+                <button class="btn btn-primary" onclick="showAddClientForm()">Agregar Cliente</button>
+                <button class="btn btn-success" onclick="showAddServiceOrderForm()">Nueva Orden</button>
+            </div>
+        </div>
+
+        <div id="alert-placeholder"></div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('clients')">Clientes</div>
+            <div class="tab" onclick="switchTab('orders')">Órdenes de Servicio</div>
+            <div class="tab" onclick="switchTab('invoices')">Facturas</div>
+        </div>
+
+        <!-- Sección de Clientes -->
+        <div id="clients-section" class="tab-content active">
+            <div id="clients-list-section">
+                <div class="card">
+                    <div class="search-container">
+                        <input type="text" id="client-search-input" placeholder="Buscar Cliente...">
+                        <button class="btn btn-primary" onclick="searchClients()">Buscar</button>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
+                                <th>Tipo de Cliente</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-table">
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="client-form-section" class="hidden">
+                <div class="card">
+                    <h2 id="client-form-title">Agregar Cliente</h2>
+                    <form id="client-form">
+                        <input type="hidden" id="client-id">
+
+                        <div class="form-group">
+                            <label for="client-name">Nombre del Cliente</label>
+                            <input type="text" id="client-name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-phone">Teléfono</label>
+                            <input type="tel" id="client-phone" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-email">Correo Electrónico</label>
+                            <input type="email" id="client-email" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="client-type">Tipo de Cliente</label>
+                            <select id="client-type" class="form-control" required>
+                                <option value="">Seleccione un tipo</option>
+                                <option value="Cliente Nuevo">Cliente Nuevo</option>
+                                <option value="Cliente Antiguo">Cliente Antiguo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-danger" onclick="cancelClientForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Órdenes de Servicio -->
+        <div id="orders-section" class="tab-content">
+            <div id="orders-list-section">
+                <div class="card">
+                    <div class="search-container">
+                        <input type="text" id="order-search-input" placeholder="Buscar Órdenes...">
+                        <button class="btn btn-primary" onclick="searchOrders()">Buscar</button>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>N° Orden</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Servicio</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                                <th>Factura</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table">
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="order-form-section" class="hidden">
+                <div class="card">
+                    <h2 id="order-form-title">Nueva Orden de Servicio</h2>
+                    <form id="order-form">
+                        <input type="hidden" id="order-id">
+                        <input type="hidden" id="order-number">
+
+                        <div class="form-group">
+                            <label for="order-client">Cliente</label>
+                            <select id="order-client" class="form-control" required>
+                                <option value="">Seleccione un cliente</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-date">Fecha</label>
+                            <input type="date" id="order-date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-service">Servicio</label>
+                            <input type="text" id="order-service" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-description">Descripción</label>
+                            <textarea id="order-description" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-status">Estado</label>
+                            <select id="order-status" class="form-control" required>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Completado">Completado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order-amount">Monto</label>
+                            <input type="number" id="order-amount" class="form-control" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-danger" onclick="cancelOrderForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Facturas -->
+        <div id="invoices-section" class="tab-content">
+            <div id="invoices-list-section">
+                <div class="card">
+                    <div class="search-container">
+                        <input type="text" id="invoice-search-input" placeholder="Buscar Facturas...">
+                        <button class="btn btn-primary" onclick="searchInvoices()">Buscar</button>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>N° Factura</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Orden de Servicio</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoices-table">
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="invoice-detail-section" class="hidden">
+                <div class="card">
+                    <div id="invoice-container" class="invoice-container">
+                        <div class="invoice-header">
+                            <div class="invoice-title">FACTURA</div>
+                            <div class="invoice-details">
+                                <div><strong>N° Factura:</strong> <span id="invoice-detail-number"></span></div>
+                                <div><strong>Fecha:</strong> <span id="invoice-detail-date"></span></div>
+                                <div><strong>Orden de Servicio:</strong> <span id="invoice-detail-order"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="invoice-company">
+                            <h3>Empresa de Servicios Técnicos</h3>
+                            <div>Dirección: Calle Principal 123, Ciudad</div>
+                            <div>Teléfono: (123) 456-7890</div>
+                            <div>Email: contacto@empresa.com</div>
+                            <div>RUC: 1234567890123</div>
+                        </div>
+
+                        <div class="invoice-to">
+                            <h4>Facturar a:</h4>
+                            <div id="invoice-detail-client-name"></div>
+                            <div id="invoice-detail-client-phone"></div>
+                            <div id="invoice-detail-client-email"></div>
+                        </div>
+
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice-detail-items">
+                            </tbody>
+                        </table>
+
+                        <div class="invoice-totals">
+                            <table>
+                                <tr>
+                                    <td>Subtotal:</td>
+                                    <td id="invoice-detail-subtotal">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>IVA (12%):</td>
+                                    <td id="invoice-detail-tax">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Total:</td>
+                                    <td id="invoice-detail-total">$0.00</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="invoice-footer">
+                            <p>Gracias por su preferencia</p>
+                            <p>Condiciones de pago: 15 días a partir de la fecha de facturación</p>
+                        </div>
+                    </div>
+
+                    <div class="print-button no-print">
+                        <button class="btn btn-primary" onclick="printInvoice()">Imprimir Factura</button>
+                        <button class="btn btn-danger" onclick="cancelInvoiceView()">Volver</button>
+                        <button class="btn btn-success" id="mark-paid-btn" onclick="markInvoiceAsPaid()">Marcar como Pagada</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos iniciales
+        let clients = JSON.parse(localStorage.getItem('clients')) || [
+            {
+                id: '1',
+                name: 'Daniel Montana',
+                phone: '3001234567',
+                email: 'daniel.montana@example.com',
+                type: 'Cliente Nuevo'
+            },
+            {
+                id: '2',
+                name: 'Jose Gomez',
+                phone: '3107654321',
+                email: 'jose.gomez@example.com',
+                type: 'Cliente Antiguo'
+            }
+        ];
+
+        let serviceOrders = JSON.parse(localStorage.getItem('serviceOrders')) || [
+            {
+                id: '1',
+                orderNumber: 'ORD-001',
+                clientId: '1',
+                date: '2023-05-15',
+                service: 'Reparación de computadora',
+                description: 'Cambio de disco duro y aumento de memoria RAM',
+                status: 'Completado',
+                amount: 250000
+            },
+            {
+                id: '2',
+                orderNumber: 'ORD-002',
+                clientId: '2',
+                date: '2023-05-18',
+                service: 'Instalación de software',
+                description: 'Instalación de paquete Office y antivirus',
+                status: 'Pendiente',
+                amount: 120000
+            }
+        ];
+
+        let invoices = JSON.parse(localStorage.getItem('invoices')) || [
+            {
+                id: '1',
+                invoiceNumber: 'FAC-001',
+                orderId: '1',
+                clientId: '1',
+                date: '2023-05-16',
+                items: [
+                    {
+                        description: 'Reparación de computadora - Cambio de disco duro y aumento de memoria RAM',
+                        quantity: 1,
+                        unitPrice: 250000,
+                        total: 250000
+                    }
+                ],
+                subtotal: 250000,
+                tax: 30000,
+                total: 280000,
+                status: 'Pagada'
+            }
+        ];
+
+        let editingClientId = null;
+        let editingOrderId = null;
+        let viewingInvoiceId = null;
+
+        // Funciones para guardar datos
+        function saveClientsToLocalStorage() {
+            localStorage.setItem('clients', JSON.stringify(clients));
+        }
+
+        function saveOrdersToLocalStorage() {
+            localStorage.setItem('serviceOrders', JSON.stringify(serviceOrders));
+        }
+
+        function saveInvoicesToLocalStorage() {
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            renderClientsTable();
+            renderOrdersTable();
+            renderInvoicesTable();
+            populateClientDropdown();
+            
+            document.getElementById('client-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveClient();
+            });
+            
+            document.getElementById('order-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveOrder();
+            });
+            
+            // Establecer fecha actual por defecto
+            document.getElementById('order-date').valueAsDate = new Date();
+        });
+
+        // Funciones para pestañas
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-section`).classList.add('active');
+        }
+
+        // Funciones para clientes
+        function showAddClientForm() {
+            switchTab('clients');
+            document.getElementById('clients-list-section').classList.add('hidden');
+            document.getElementById('client-form-section').classList.remove('hidden');
+            document.getElementById('client-form-title').textContent = 'Agregar Cliente';
+            document.getElementById('client-form').reset();
+            document.getElementById('client-id').value = '';
+            editingClientId = null;
+        }
+
+        function cancelClientForm() {
+            document.getElementById('clients-list-section').classList.remove('hidden');
+            document.getElementById('client-form-section').classList.add('hidden');
+            document.getElementById('client-form').reset();
+            editingClientId = null;
+        }
+
+        function renderClientsTable(clientsToRender = clients) {
+            const tableBody = document.getElementById('clients-table');
+            tableBody.innerHTML = '';
+
+            if (clientsToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No hay clientes registrados</td></tr>';
+                return;
+            }
+
+            clientsToRender.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.email}</td>
+                    <td>${client.type}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="editClient('${client.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteClient('${client.id}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchClients() {
+            const searchTerm = document.getElementById('client-search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderClientsTable();
+                return;
+            }
+            
+            const filteredClients = clients.filter(client => 
+                client.name.toLowerCase().includes(searchTerm) ||
+                client.phone.toLowerCase().includes(searchTerm) ||
+                client.email.toLowerCase().includes(searchTerm) ||
+                client.type.toLowerCase().includes(searchTerm)
+            );
+            
+            renderClientsTable(filteredClients);
+        }
+
+        function saveClient() {
+            const client = {
+                id: editingClientId || generateId(),
+                name: document.getElementById('client-name').value,
+                phone: document.getElementById('client-phone').value,
+                email: document.getElementById('client-email').value,
+                type: document.getElementById('client-type').value
+            };
+
+            if (editingClientId) {
+                const index = clients.findIndex(c => c.id === editingClientId);
+                if (index !== -1) {
+                    clients[index] = client;
+                    showAlert('Cliente actualizado correctamente', 'success');
+                }
+            } else {
+                clients.push(client);
+                showAlert('Cliente agregado correctamente', 'success');
+            }
+
+            saveClientsToLocalStorage();
+            populateClientDropdown();
+            cancelClientForm();
+            renderClientsTable();
+        }
+
+        function editClient(id) {
+            const client = clients.find(c => c.id === id);
+            if (!client) return;
+
+            editingClientId = id;
+
+            document.getElementById('client-id').value = client.id;
+            document.getElementById('client-name').value = client.name;
+            document.getElementById('client-phone').value = client.phone;
+            document.getElementById('client-email').value = client.email;
+            document.getElementById('client-type').value = client.type;
+
+            document.getElementById('clients-list-section').classList.add('hidden');
+            document.getElementById('client-form-section').classList.remove('hidden');
+            document.getElementById('client-form-title').textContent = 'Editar Cliente';
+        }
+
+        function deleteClient(id) {
+            if (confirm('¿Está seguro que desea eliminar este cliente?')) {
+                // Verificar si el cliente tiene órdenes asociadas
+                const hasOrders = serviceOrders.some(order => order.clientId === id);
+                
+                if (hasOrders) {
+                    showAlert('No se puede eliminar el cliente porque tiene órdenes de servicio asociadas', 'danger');
+                    return;
+                }
+                
+                clients = clients.filter(client => client.id !== id);
+                saveClientsToLocalStorage();
+                populateClientDropdown();
+                renderClientsTable();
+                showAlert('Cliente eliminado correctamente', 'success');
+            }
+        }
+
+        // Funciones para órdenes de servicio
+        function showAddServiceOrderForm() {
+            switchTab('orders');
+            document.getElementById('orders-list-section').classList.add('hidden');
+            document.getElementById('order-form-section').classList.remove('hidden');
+            document.getElementById('order-form-title').textContent = 'Nueva Orden de Servicio';
+            document.getElementById('order-form').reset();
+            document.getElementById('order-id').value = '';
+            document.getElementById('order-date').valueAsDate = new Date();
+            editingOrderId = null;
+            
+            // Generar nuevo número de orden
+            if (!editingOrderId) {
+                const lastOrder = serviceOrders.reduce((prev, current) => 
+                    (parseInt(current.orderNumber.split('-')[1]) > parseInt(prev.orderNumber.split('-')[1])) ? current : prev, 
+                    {orderNumber: 'ORD-0'});
+                
+                const lastNumber = parseInt(lastOrder.orderNumber.split('-')[1]);
+                document.getElementById('order-number').value = `ORD-${(lastNumber + 1).toString().padStart(3, '0')}`;
+            }
+        }
+
+        function cancelOrderForm() {
+            document.getElementById('orders-list-section').classList.remove('hidden');
+            document.getElementById('order-form-section').classList.add('hidden');
+            document.getElementById('order-form').reset();
+            editingOrderId = null;
+        }
+
+        function renderOrdersTable(ordersToRender = serviceOrders) {
+            const tableBody = document.getElementById('orders-table');
+            tableBody.innerHTML = '';
+
+            if (ordersToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No hay órdenes de servicio registradas</td></tr>';
+                return;
+            }
+
+            ordersToRender.forEach(order => {
+                const client = clients.find(c => c.id === order.clientId);
+                const clientName = client ? client.name : 'Cliente no encontrado';
+                const hasInvoice = invoices.some(inv => inv.orderId === order.id);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.orderNumber}</td>
+                    <td>${clientName}</td>
+                    <td>${formatDate(order.date)}</td>
+                    <td>${order.service}</td>
+                    <td><span class="status-${order.status.toLowerCase()}">${order.status}</span></td>
+                    <td>$${order.amount.toLocaleString()}</td>
+                    <td>
+                        ${hasInvoice ? 
+                            '<span class="status-paid">Facturada</span>' : 
+                            `<button class="btn btn-info" onclick="generateInvoice('${order.id}')">Generar Factura</button>`
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="editOrder('${order.id}')">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteOrder('${order.id}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchOrders() {
+            const searchTerm = document.getElementById('order-search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderOrdersTable();
+                return;
+            }
+            
+            const filteredOrders = serviceOrders.filter(order => {
+                const client = clients.find(c => c.id === order.clientId);
+                const clientName = client ? client.name.toLowerCase() : '';
+                
+                return (
+                    order.orderNumber.toLowerCase().includes(searchTerm) ||
+                    clientName.includes(searchTerm) ||
+                    order.service.toLowerCase().includes(searchTerm) ||
+                    order.status.toLowerCase().includes(searchTerm) ||
+                    order.amount.toString().includes(searchTerm)
+                );
+            });
+            
+            renderOrdersTable(filteredOrders);
+        }
+
+        function populateClientDropdown() {
+            const dropdown = document.getElementById('order-client');
+            dropdown.innerHTML = '<option value="">Seleccione un cliente</option>';
+            
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = `${client.name} (${client.phone})`;
+                dropdown.appendChild(option);
+            });
+        }
+
+        function saveOrder() {
+            const clientId = document.getElementById('order-client').value;
+            const client = clients.find(c => c.id === clientId);
+            
+            if (!client) {
+                showAlert('Por favor seleccione un cliente válido', 'danger');
+                return;
+            }
+            
+            const order = {
+                id: editingOrderId || generateId(),
+                orderNumber: document.getElementById('order-number').value || generateOrderNumber(),
+                clientId: clientId,
+                date: document.getElementById('order-date').value,
+                service: document.getElementById('order-service').value,
+                description: document.getElementById('order-description').value,
+                status: document.getElementById('order-status').value,
+                amount: parseFloat(document.getElementById('order-amount').value)
+            };
+
+            if (editingOrderId) {
+                const index = serviceOrders.findIndex(o => o.id === editingOrderId);
+                if (index !== -1) {
+                    serviceOrders[index] = order;
+                    showAlert('Orden actualizada correctamente', 'success');
+                }
+            } else {
+                serviceOrders.push(order);
+                showAlert('Orden agregada correctamente', 'success');
+            }
+
+            saveOrdersToLocalStorage();
+            cancelOrderForm();
+            renderOrdersTable();
+        }
+
+        function editOrder(id) {
+            const order = serviceOrders.find(o => o.id === id);
+            if (!order) return;
+
+            editingOrderId = id;
+
+            document.getElementById('order-id').value = order.id;
+            document.getElementById('order-number').value = order.orderNumber;
+            document.getElementById('order-client').value = order.clientId;
+            document.getElementById('order-date').value = order.date;
+            document.getElementById('order-service').value = order.service;
+            document.getElementById('order-description').value = order.description || '';
+            document.getElementById('order-status').value = order.status;
+            document.getElementById('order-amount').value = order.amount;
+
+            document.getElementById('orders-list-section').classList.add('hidden');
+            document.getElementById('order-form-section').classList.remove('hidden');
+            document.getElementById('order-form-title').textContent = 'Editar Orden de Servicio';
+        }
+
+        function deleteOrder(id) {
+            if (confirm('¿Está seguro que desea eliminar esta orden de servicio?')) {
+                // Verificar si la orden tiene factura asociada
+                const hasInvoice = invoices.some(inv => inv.orderId === id);
+                
+                if (hasInvoice) {
+                    showAlert('No se puede eliminar la orden porque tiene una factura asociada', 'danger');
+                    return;
+                }
+                
+                serviceOrders = serviceOrders.filter(order => order.id !== id);
+                saveOrdersToLocalStorage();
+                renderOrdersTable();
+                showAlert('Orden eliminada correctamente', 'success');
+            }
+        }
+
+        // Funciones para facturas
+        function renderInvoicesTable(invoicesToRender = invoices) {
+            const tableBody = document.getElementById('invoices-table');
+            tableBody.innerHTML = '';
+
+            if (invoicesToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No hay facturas registradas</td></tr>';
+                return;
+            }
+
+            invoicesToRender.forEach(invoice => {
+                const client = clients.find(c => c.id === invoice.clientId);
+                const clientName = client ? client.name : 'Cliente no encontrado';
+                const order = serviceOrders.find(o => o.id === invoice.orderId);
+                const orderNumber = order ? order.orderNumber : 'Orden no encontrada';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${invoice.invoiceNumber}</td>
+                    <td>${clientName}</td>
+                    <td>${formatDate(invoice.date)}</td>
+                    <td>${orderNumber}</td>
+                    <td>$${invoice.total.toLocaleString()}</td>
+                    <td><span class="status-${invoice.status.toLowerCase()}">${invoice.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="viewInvoice('${invoice.id}')">Ver</button>
+                        <button class="btn btn-danger" onclick="deleteInvoice('${invoice.id}')">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchInvoices() {
+            const searchTerm = document.getElementById('invoice-search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderInvoicesTable();
+                return;
+            }
+            
+            const filteredInvoices = invoices.filter(invoice => {
+                const client = clients.find(c => c.id === invoice.clientId);
+                const clientName = client ? client.name.toLowerCase() : '';
+                const order = serviceOrders.find(o => o.id === invoice.orderId);
+                const orderNumber = order ? order.orderNumber.toLowerCase() : '';
+                
+                return (
+                    invoice.invoiceNumber.toLowerCase().includes(searchTerm) ||
+                    clientName.includes(searchTerm) ||
+                    orderNumber.includes(searchTerm) ||
+                    invoice.total.toString().includes(searchTerm) ||
+                    invoice.status.toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            renderInvoicesTable(filteredInvoices);
+        }
+
+        function generateInvoice(orderId) {
+            const order = serviceOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const client = clients.find(c => c.id === order.clientId);
+            if (!client) return;
+
+            // Verificar si ya existe una factura para esta orden
+            const existingInvoice = invoices.find(inv => inv.orderId === orderId);
+            if (existingInvoice) {
+                showAlert('Ya existe una factura para esta orden de servicio', 'warning');
+                return;
+            }
+
+            // Calcular impuestos (12% IVA)
+            const subtotal = order.amount;
+            const tax = subtotal * 0.12;
+            const total = subtotal + tax;
+
+            const newInvoice = {
+                id: generateId(),
+                invoiceNumber: generateInvoiceNumber(),
+                orderId: order.id,
+                clientId: client.id,
+                date: new Date().toISOString().split('T')[0],
+                items: [
+                    {
+                        description: `${order.service} - ${order.description}`,
+                        quantity: 1,
+                        unitPrice: order.amount,
+                        total: order.amount
+                    }
+                ],
+                subtotal: subtotal,
+                tax: tax,
+                total: total,
+                status: 'No Pagada'
+            };
+
+            invoices.push(newInvoice);
+            saveInvoicesToLocalStorage();
+            renderOrdersTable();
+            renderInvoicesTable();
+            showAlert('Factura generada correctamente', 'success');
+        }
+
+        function viewInvoice(id) {
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice) return;
+
+            viewingInvoiceId = id;
+
+            const client = clients.find(c => c.id === invoice.clientId);
+            const order = serviceOrders.find(o => o.id === invoice.orderId);
+
+            // Llenar los datos de la factura
+            document.getElementById('invoice-detail-number').textContent = invoice.invoiceNumber;
+            document.getElementById('invoice-detail-date').textContent = formatDate(invoice.date);
+            document.getElementById('invoice-detail-order').textContent = order ? order.orderNumber : 'N/A';
+            
+            if (client) {
+                document.getElementById('invoice-detail-client-name').textContent = client.name;
+                document.getElementById('invoice-detail-client-phone').textContent = client.phone;
+                document.getElementById('invoice-detail-client-email').textContent = client.email;
+            }
+
+            // Llenar los items de la factura
+            const itemsBody = document.getElementById('invoice-detail-items');
+            itemsBody.innerHTML = '';
+
+            invoice.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.unitPrice.toLocaleString()}</td>
+                    <td>$${item.total.toLocaleString()}</td>
+                `;
+                itemsBody.appendChild(row);
+            });
+
+            // Actualizar totales
+            document.getElementById('invoice-detail-subtotal').textContent = `$${invoice.subtotal.toLocaleString()}`;
+            document.getElementById('invoice-detail-tax').textContent = `$${invoice.tax.toLocaleString()}`;
+            document.getElementById('invoice-detail-total').textContent = `$${invoice.total.toLocaleString()}`;
+
+            // Mostrar/ocultar botón de pagado según estado
+            const markPaidBtn = document.getElementById('mark-paid-btn');
+            if (invoice.status === 'Pagada') {
+                markPaidBtn.style.display = 'none';
+            } else {
+                markPaidBtn.style.display = 'inline-block';
+            }
+
+            // Mostrar la vista de detalle
+            document.getElementById('invoices-list-section').classList.add('hidden');
+            document.getElementById('invoice-detail-section').classList.remove('hidden');
+        }
+
+        function cancelInvoiceView() {
+            document.getElementById('invoices-list-section').classList.remove('hidden');
+            document.getElementById('invoice-detail-section').classList.add('hidden');
+            viewingInvoiceId = null;
+        }
+
+        function markInvoiceAsPaid() {
+            if (!viewingInvoiceId) return;
+
+            const invoice = invoices.find(inv => inv.id === viewingInvoiceId);
+            if (!invoice) return;
+
+            invoice.status = 'Pagada';
+            saveInvoicesToLocalStorage();
+            
+            // Actualizar la vista
+            viewInvoice(viewingInvoiceId);
+            renderInvoicesTable();
+            showAlert('Factura marcada como pagada', 'success');
+        }
+
+        function deleteInvoice(id) {
+            if (confirm('¿Está seguro que desea eliminar esta factura?')) {
+                invoices = invoices.filter(invoice => invoice.id !== id);
+                saveInvoicesToLocalStorage();
+                renderInvoicesTable();
+                showAlert('Factura eliminada correctamente', 'success');
+                
+                // Si estábamos viendo esta factura, volver a la lista
+                if (viewingInvoiceId === id) {
+                    cancelInvoiceView();
+                }
+            }
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+        function generateInvoiceNumber() {
+            const lastInvoice = invoices.reduce((prev, current) => 
+                (parseInt(current.invoiceNumber.split('-')[1]) > parseInt(prev.invoiceNumber.split('-')[1])) ? current : prev, 
+                {invoiceNumber: 'FAC-0'});
+            
+            const lastNumber = parseInt(lastInvoice.invoiceNumber.split('-')[1]);
+            return `FAC-${(lastNumber + 1).toString().padStart(3, '0')}`;
+        }
+
+        // Funciones auxiliares
+        function showAlert(message, type) {
+            const alertPlaceholder = document.getElementById('alert-placeholder');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                ${message}
+                <button style="float: right; background: none; border: none; cursor: pointer;" onclick="this.parentElement.remove()">
+                    &times;
+                </button>
+            `;
+            
+            alertPlaceholder.innerHTML = '';
+            alertPlaceholder.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function generateId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function generateOrderNumber() {
+            const lastOrder = serviceOrders.reduce((prev, current) => 
+                (parseInt(current.orderNumber.split('-')[1]) > parseInt(prev.orderNumber.split('-')[1])) ? current : prev, 
+                {orderNumber: 'ORD-0'});
+            
+            const lastNumber = parseInt(lastOrder.orderNumber.split('-')[1]);
+            return `ORD-${(lastNumber + 1).toString().padStart(3, '0')}`;
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+    </script>
+</body>
+</html>
