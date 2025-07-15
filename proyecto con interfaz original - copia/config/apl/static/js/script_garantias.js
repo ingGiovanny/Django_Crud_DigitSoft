@@ -1,119 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digit Soft - Gestión de Producto</title>
-
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Gestión de Producto</h1>
-            <button class="btn btn-primary" onclick="showAddForm()">Registrar Producto</button>
-        </div>
-
-        <div id="alert-placeholder"></div>
-
-        <!-- Sección de búsqueda y listado -->
-        <div id="list-section">
-            <div class="card">
-                <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Buscar Producto...">
-                    <button class="btn btn-primary" onclick="searchProviders()">Buscar</button>
-                </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nombre del Producto</th>
-                            <th>Especificaciones del equipo</th>
-                            <th>Cantidad</th>
-                            <th>Valor</th>
-                            <th>Estado del Producto</th>
-
-                        </tr>
-                    </thead>
-                    <tbody id="providers-table">
-                        <!-- Los productos se cargarán aquí -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Sección de formulario para agregar/editar -->
-        <div id="form-section" class="hidden">
-            <div class="card">
-                <h2 id="form-title">Registrar Producto</h2>
-                <form id="provider-form">
-                    <input type="hidden" id="provider-id">
-
-                    <div class="form-group">
-                        <label for="provider-name">Nombre del Producto</label>
-                        <input type="text" id="provider-name" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="provider-id-number">Especificaciones del equipo</label>
-                        <input type="text" id="provider-id-number" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="provider-nit">Cantidad</label>
-                        <input type="text" id="provider-nit" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="provider-address">Valor</label>
-                        <input type="text" id="provider-address" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="provider-phone">Estado del Producto</label>
-                        <input type="tel" id="provider-phone" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                        <button type="button" class="btn btn-danger" onclick="cancelForm()">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Datos de ejemplo (en un sistema real, estos vendrían de una base de datos)
-        let providers = [
+// Datos de ejemplo (en un sistema real, estos vendrían de una base de datos)
+       let providers = [
             {
                 id: '1',
-                name: 'Computador portátil  Lenovo ',
-                idNumber: 'ThinkBook 16 G6 FHD+ de 16 pulgadas, Intel 10-Core i5-1335U (Beat i7-1270P), 32 GB DDR5 RAM, 1 TB PCIe SSD, WiFi 6, Bluetooth 5.1, lector de huellas dactilares, Windows 11',
-                nit: '1',
-                address: '$3.596.000',
-                phone: 'En buen estado'
+                name: 'Servicio Técnico Ejemplo 1',
+                idNumber: '123456789',
+                nit: '901234567-8',
+                address: 'Juan@gmail.com',
+                phone: 'Hp'
             },
             {
                 id: '2',
-                name: 'Impresora HP',
-                idNumber: 'Smart Tank 5101 Impresora inalámbrica todo en uno con 2 años de tinta incluidos, impresión, escaneo, copia, mejor para el hogar, tanque de tinta recargable (1F3Y0A)',
-                nit: '1',
-                address: '$699.400',
-                phone: 'Destapada'
+                name: 'Servicio Técnico Ejemplo 2',
+                idNumber: '1234567890',
+                nit: '876543210-9',
+                address: 'Luis@hotmail.com',
+                phone: 'Asus'
             }
         ];
+    
 
         // Variable para controlar si estamos editando
         let editingProviderId = null;
 
         // Al cargar la página
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             renderProvidersTable();
-
+            
             // Configurar el formulario
-            document.getElementById('provider-form').addEventListener('submit', function (e) {
+            document.getElementById('provider-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveProvider();
             });
@@ -123,7 +37,7 @@
         function showAddForm() {
             document.getElementById('list-section').classList.add('hidden');
             document.getElementById('form-section').classList.remove('hidden');
-            document.getElementById('form-title').textContent = 'Agregar Producto';
+            document.getElementById('form-title').textContent = 'Agregar Garantía';
             document.getElementById('provider-form').reset();
             editingProviderId = null;
         }
@@ -136,13 +50,13 @@
             editingProviderId = null;
         }
 
-        // Renderizar la tabla de producto
+        // Renderizar la tabla de Garantía
         function renderProvidersTable(providersToRender = providers) {
             const tableBody = document.getElementById('providers-table');
             tableBody.innerHTML = '';
 
             if (providersToRender.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay proveedores registrados</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay Garantías registradas</td></tr>';
                 return;
             }
 
@@ -163,27 +77,27 @@
             });
         }
 
-        // Buscar proveedores
+        // Buscar Grantías
         function searchProviders() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
-
+            
             if (!searchTerm) {
                 renderProvidersTable();
                 return;
             }
-
-            const filteredProviders = providers.filter(provider =>
+            
+            const filteredProviders = providers.filter(provider => 
                 provider.name.toLowerCase().includes(searchTerm) ||
                 provider.idNumber.toLowerCase().includes(searchTerm) ||
                 provider.nit.toLowerCase().includes(searchTerm) ||
                 provider.phone.toLowerCase().includes(searchTerm) ||
                 provider.address.toLowerCase().includes(searchTerm)
             );
-
+            
             renderProvidersTable(filteredProviders);
         }
 
-        // Guardar proveedor (crear o actualizar)
+        // Guardar Garantías (crear o actualizar)
         function saveProvider() {
             const provider = {
                 id: editingProviderId || generateId(),
@@ -195,16 +109,16 @@
             };
 
             if (editingProviderId) {
-                // Actualizar proveedor existente
+                // Actualizar Grantías existente
                 const index = providers.findIndex(p => p.id === editingProviderId);
                 if (index !== -1) {
                     providers[index] = provider;
-                    showAlert('Producto actualizado correctamente', 'success');
+                    showAlert('Garantía actualizada correctamente', 'success');
                 }
             } else {
-                // Agregar nuevo proveedor
+                // Agregar nuevo Equipo
                 providers.push(provider);
-                showAlert('Producto agregado correctamente', 'success');
+                showAlert('Garantía agregada correctamente', 'success');
             }
 
             // Volver a la lista y actualizar
@@ -212,7 +126,7 @@
             renderProvidersTable();
         }
 
-        // Editar proveedor
+        // Editar Garantía
         function editProvider(id) {
             const provider = providers.find(p => p.id === id);
             if (!provider) return;
@@ -230,15 +144,15 @@
             // Mostrar el formulario
             document.getElementById('list-section').classList.add('hidden');
             document.getElementById('form-section').classList.remove('hidden');
-            document.getElementById('form-title').textContent = 'Editar Producto';
+            document.getElementById('form-title').textContent = 'Editar Garantía';
         }
 
-        // Eliminar proveedor
+        // Eliminar Garantía
         function deleteProvider(id) {
-            if (confirm('¿Está seguro que desea eliminar este producto?')) {
+            if (confirm('¿Está seguro que desea eliminar esta Garantía?')) {
                 providers = providers.filter(provider => provider.id !== id);
                 renderProvidersTable();
-                showAlert('Producto eliminado correctamente', 'success');
+                showAlert('Garantía eliminada correctamente', 'success');
             }
         }
 
@@ -253,10 +167,10 @@
                     &times;
                 </button>
             `;
-
+            
             alertPlaceholder.innerHTML = '';
             alertPlaceholder.appendChild(alert);
-
+            
             // Eliminar la alerta después de 5 segundos
             setTimeout(() => {
                 alert.remove();
@@ -265,12 +179,8 @@
 
         // Generar ID único
         function generateId() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
         }
-    </script>
-</body>
-
-</html>

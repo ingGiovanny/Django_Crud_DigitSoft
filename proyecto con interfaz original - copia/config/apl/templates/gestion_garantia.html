@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Soft - GARANTÍA </title>
+    
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Garantía</h1>
+            <button class="btn btn-primary" onclick="showAddForm()">Registrar Garantia</button>
+        </div>
+
+        <div id="alert-placeholder"></div>
+
+        <!-- Sección de búsqueda y listado -->
+        <div id="list-section">
+            <div class="card">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Buscar Garantía...">
+                    <button class="btn btn-primary" onclick="searchProviders()">Buscar</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del comprador</th>
+                            <th>Cédula</th>
+                            <th>Teléfono</th>
+                            <th>Correo Electrónico</th>
+                            <th>Nombre del producto</th>
+                            <th>Numero de Serie</th>
+                            <th>Modelo</th>
+                            <th>Factura</th>
+                        </tr>
+                    </thead>
+                    <tbody id="providers-table">
+                        <!-- Las Garantías se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sección de formulario para agregar/editar -->
+        <div id="form-section" class="hidden">
+            <div class="card">
+                <h2 id="form-title">Registrar Garantía</h2>
+                <form id="provider-form">
+                    <input type="hidden" id="provider-id">
+
+                    <div class="form-group">
+                        <label for="provider-name">Nombre del comprador</label>
+                        <input type="text" id="provider-name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-id-number">Cédula</label>
+                        <input type="text" id="provider-id-number" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-nit">Teléfono</label>
+                        <input type="text" id="provider-nit" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-address">Correo Electrónico</label>
+                        <input type="text" id="provider-address" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-phone">Nombre del producto</label>
+                        <input type="tel" id="provider-phone" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provider-phone">Numero de Serie</label>
+                        <input type="tel" id="provider-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="provider-phone">Modelo</label>
+                        <input type="tel" id="provider-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="provider-phone">Factura</label>
+                        <input type="tel" id="provider-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" onclick="cancelForm()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

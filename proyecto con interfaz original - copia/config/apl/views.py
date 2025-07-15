@@ -10,3 +10,4 @@ from django.shortcuts import render
         #'message': 'Welcome to the base template of the application.'
     #}
     #return render(request, 'apl/base.html', data)
+    
